@@ -23,5 +23,5 @@ modules:
       - type: archive
         only-arches:
           - x86_64
-        url: https://github.com/TheAppgineer/community_remote/releases/download/0.0.2/community_remote-linux-x86_64.tar.gz
-        sha256: 4b836cac806ca1feccadd1c21b4fd9d0cc16c8ad0df88cdd5745e588ad1c67a4
+        url: https://github.com/TheAppgineer/community_remote/releases/download/0.0.3/community_remote-linux-x86_64.tar.gz
+        sha256: d41db649931ea0844c0e9b22fb7838ca88a30a9da1eeb8cb2dc04a12b56f003c
