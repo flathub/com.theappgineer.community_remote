@@ -24,10 +24,10 @@ modules:
       - type: archive
         only-arches:
           - x86_64
-        url: https://github.com/TheAppgineer/community_remote/releases/download/0.0.5/community_remote-linux-x86_64.tar.gz
-        sha256: 3fa83d08b1c17a09ae65232a6438cd1b8dd5f10fe840a1892f4eb696f9cc7e07
+        url: https://github.com/TheAppgineer/community_remote/releases/download/0.0.6/community_remote-linux-x86_64.tar.gz
+        sha256: 4814a8fa30e119af7775318b06534cdbd3876ea3e4ed6ce67c2e506105911e51
       - type: archive
         only-arches:
           - aarch64
-        url: https://github.com/TheAppgineer/community_remote/releases/download/0.0.5/community_remote-linux-aarch64.tar.gz
-        sha256: f762ebe5e58d39c5f17cbd3f161037713a1c5d15cf13e736b6f3878b7fb71590
+        url: https://github.com/TheAppgineer/community_remote/releases/download/0.0.6/community_remote-linux-aarch64.tar.gz
+        sha256: b10310a44eea3e6e477d4cba2c83a4ebda2bed5b76d6650ae14764c8b139ba9d
