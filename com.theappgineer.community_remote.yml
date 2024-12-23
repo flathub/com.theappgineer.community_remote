@@ -2,6 +2,8 @@ id: com.theappgineer.community_remote
 runtime: org.freedesktop.Platform
 runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.llvm19
 command: community_remote
 finish-args:
   - --share=ipc
@@ -12,22 +14,37 @@ finish-args:
 modules:
   - name: community_remote
     buildsystem: simple
+    build-options:
+      arch:
+        x86_64:
+          env:
+            BUNDLE_PATH: /run/build/community_remote/build/linux/x64/release/bundle
+        arm:
+          env:
+            BUNDLE_PATH: /run/build/community_remote/build/linux/arm64/release/bundle
+      append-path: /usr/lib/sdk/llvm19/bin:/run/build/community_remote/cargo/bin:/run/build/community_remote/flutter/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
+      build-args:
+        - --share=network
+      env:
+        CARGO_HOME: /run/build/community_remote/cargo
+        RUSTUP_HOME: /run/build/community_remote/cargo
     build-commands:
-      - install -D community_remote /app/bin/community_remote
-      - cp -r lib /app/bin/lib
-      - cp -r data /app/bin/data
-      - install -D com.theappgineer.community_remote.metainfo.xml /app/share/metainfo/com.theappgineer.community_remote.metainfo.xml
-      - install -D com.theappgineer.community_remote.desktop /app/share/applications/com.theappgineer.community_remote.desktop
-      - install -D icons/256x256/com.theappgineer.community_remote.png /app/share/icons/hicolor/256x256/apps/com.theappgineer.community_remote.png
-      - install -D icons/512x512/com.theappgineer.community_remote.png /app/share/icons/hicolor/512x512/apps/com.theappgineer.community_remote.png
+      - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+      - cargo install 'flutter_rust_bridge_codegen@^2.0.0'
+      - flutter --disable-analytics && flutter pub get && flutter_rust_bridge_codegen generate && flutter build linux --release
+      - install -D $BUNDLE_PATH/community_remote /app/bin/community_remote
+      - cp -r $BUNDLE_PATH/lib /app/bin/lib
+      - cp -r $BUNDLE_PATH/data /app/bin/data
+      - install -D /run/build/community_remote/flatpak/com.theappgineer.community_remote.metainfo.xml /app/share/metainfo/com.theappgineer.community_remote.metainfo.xml
+      - install -D /run/build/community_remote/flatpak/com.theappgineer.community_remote.desktop /app/share/applications/com.theappgineer.community_remote.desktop
+      - install -D /run/build/community_remote/flatpak/icons/256x256/com.theappgineer.community_remote.png /app/share/icons/hicolor/256x256/apps/com.theappgineer.community_remote.png
+      - install -D /run/build/community_remote/flatpak/icons/512x512/com.theappgineer.community_remote.png /app/share/icons/hicolor/512x512/apps/com.theappgineer.community_remote.png
     sources:
-      - type: archive
-        only-arches:
-          - x86_64
-        url: https://github.com/TheAppgineer/community_remote/releases/download/0.2.0/community_remote-linux-x86_64.tar.gz
-        sha256: 22e05391cefecbb50d850e1b66ba5535d181d5c4cd872e82ea461dcc71dfd05a
-      - type: archive
-        only-arches:
-          - aarch64
-        url: https://github.com/TheAppgineer/community_remote/releases/download/0.2.0/community_remote-linux-aarch64.tar.gz
-        sha256: 43b77dc2aa62a6f56bf8ece5d4954d88bbdf2cb469fc8b3b51c762f93c33b39d
+      - type: git
+        url: https://github.com/flutter/flutter.git
+        tag: 3.24.2
+        dest: "flutter"
+      - type: git
+        url: https://github.com/TheAppgineer/community_remote.git
+        tag: 0.2.0
