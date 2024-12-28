@@ -4,6 +4,7 @@ runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm19
+  - org.freedesktop.Sdk.Extension.rustup-stable
 command: community_remote
 finish-args:
   - --share=ipc
@@ -22,16 +23,16 @@ modules:
         aarch64:
           env:
             BUNDLE_PATH: /run/build/community_remote/build/linux/arm64/release/bundle
-      append-path: /usr/lib/sdk/llvm19/bin:/run/build/community_remote/flutter/bin:/run/build/community_remote/cargo/toolchains/stable-x86_64-unknown-linux-gnu/bin
+      append-path: /usr/lib/sdk/llvm19/bin:/usr/lib/sdk/rustup-stable/toolchains/stable-x86_64-unknown-linux-gnu/bin:/run/build/community_remote/flutter/bin:/run/build/community_remote/bin
       prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
       env:
         CARGO_HOME: /run/build/community_remote/cargo
-        RUSTUP_HOME: /run/build/community_remote/cargo
+        RUSTUP_HOME: /usr/lib/sdk/rustup-stable
         PUB_CACHE: /run/build/community_remote/.pub-cache
     build-commands:
-      - cd rustup && cargo build --release && cp target/release/rustup-init ../cargo/toolchains/stable-x86_64-unknown-linux-gnu/bin/rustup
-      - cd cargo-expand && cargo build --release && cp target/release/cargo-expand ../cargo/toolchains/stable-x86_64-unknown-linux-gnu/bin/
-      - cd flutter_rust_bridge/frb_codegen && cargo build --release && cp ../target/release/flutter_rust_bridge_codegen ../../cargo/toolchains/stable-x86_64-unknown-linux-gnu/bin/
+      - mkdir bin
+      - cd cargo-expand && cargo build --release && cp target/release/cargo-expand ../bin/
+      - cd flutter_rust_bridge/frb_codegen && cargo build --release && cp ../target/release/flutter_rust_bridge_codegen ../../bin/
       - flutter pub get --offline --enforce-lockfile
       - flutter_rust_bridge_codegen generate
       - flutter build linux --no-pub --release
@@ -43,10 +44,6 @@ modules:
       - install -D /run/build/community_remote/flatpak/icons/256x256/com.theappgineer.community_remote.png /app/share/icons/hicolor/256x256/apps/com.theappgineer.community_remote.png
       - install -D /run/build/community_remote/flatpak/icons/512x512/com.theappgineer.community_remote.png /app/share/icons/hicolor/512x512/apps/com.theappgineer.community_remote.png
     sources:
-      - type: git
-        url: https://github.com/rust-lang/rustup.git
-        tag: 1.27.1
-        dest: rustup
       - type: git
         url: https://github.com/dtolnay/cargo-expand.git
         tag: 1.0.95
@@ -65,22 +62,12 @@ modules:
       - type: archive
         path: cache.tar.gz
         strip-components: 0
-      - type: archive
-        dest: rust-x86_64-unknown-linux-gnu
-        url: https://static.rust-lang.org/dist/rust-1.83.0-x86_64-unknown-linux-gnu.tar.xz
-        sha256: b6467a0e8a6c5dca35269785c994e4d80d89754d6c600162cc9146f90c87ee08
       - type: shell
         commands:
           - cd flutter && git remote set-url origin file:///run/build/community_remote/flutter
           - mkdir -p build/native_assets/linux
-          - ./rust-x86_64-unknown-linux-gnu/install.sh --prefix=cargo/toolchains/stable-x86_64-unknown-linux-gnu --without=rust-docs --without=rust-docs-json-preview --disable-ldconfig --verbose
-          - rm cargo/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/manifest-*
       - type: patch
         path: run_build_tool.sh.patch
-      - type: archive
-        path: toolchain-rustlib.tar.gz
-        strip-components: 0
-      - cargo-sources-rustup.json
       - cargo-sources-cargo-expand.json
       - cargo-sources-flutter_rust_bridge.json
       - cargo-sources-community_remote.json
