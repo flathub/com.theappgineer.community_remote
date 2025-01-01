@@ -1,0 +1,30 @@
+{
+  "name": "flutter",
+  "buildsystem": "simple",
+  "only-arches": [
+    "x86_64"
+  ],
+  "build-commands": [
+    "./setup.sh",
+    "mkdir -p /app/lib/flutter && cp -r flutter /app/lib",
+    "cd /app/lib/flutter && git remote set-url origin file:///app/lib/flutter"
+  ],
+  "sources": [
+    {
+      "type": "archive",
+      "url": "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.2-stable.tar.xz",
+      "sha256": "143f77340401e7f147a380ba18112445ed017c1d187fb4d20e40bb6ea1f13aa5",
+      "dest": "flutter"
+    },
+    {
+      "type": "script",
+      "dest-filename": "setup.sh",
+      "commands": [
+        "mv flutter/bin/cache{,-base}",
+        "APP=$(IFS=\".\" && read -ra array <<< $FLATPAK_ID && echo ${array[-1]})",
+        "ln -s /run/build/$APP/flutter/bin/cache flutter/bin/cache",
+        "ln -s /run/build/$APP/flutter/packages/flutter_tools/.dart_tool flutter/packages/flutter_tools/.dart_tool"
+      ]
+    }
+  ]
+}

@@ -4,7 +4,7 @@ runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm19
-  - org.freedesktop.Sdk.Extension.rustup-stable
+  - org.freedesktop.Sdk.Extension.rustup-stable-minimal
 command: community_remote
 finish-args:
   - --share=ipc
@@ -12,6 +12,8 @@ finish-args:
   - --socket=wayland
   - --device=dri
   - --share=network
+cleanup:
+  - /lib/flutter
 modules:
   - name: community_remote
     buildsystem: simple
@@ -23,19 +25,19 @@ modules:
         aarch64:
           env:
             BUNDLE_PATH: /run/build/community_remote/build/linux/arm64/release/bundle
-      append-path: /usr/lib/sdk/llvm19/bin:/usr/lib/sdk/rustup-stable/toolchains/stable-x86_64-unknown-linux-gnu/bin:/run/build/community_remote/flutter/bin:/run/build/community_remote/bin
+      append-path: /usr/lib/sdk/llvm19/bin:/usr/lib/sdk/rustup-stable-minimal/bin:/app/lib/flutter/bin:/run/build/community_remote/bin
       prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
       env:
         CARGO_HOME: /run/build/community_remote/cargo
-        RUSTUP_HOME: /usr/lib/sdk/rustup-stable
+        RUSTUP_HOME: /usr/lib/sdk/rustup-stable-minimal
         PUB_CACHE: /run/build/community_remote/.pub-cache
     build-commands:
       - mkdir bin
       - cd cargo-expand && cargo build --release && cp target/release/cargo-expand ../bin/
       - cd flutter_rust_bridge/frb_codegen && cargo build --release && cp ../target/release/flutter_rust_bridge_codegen ../../bin/
-      - flutter pub get --offline --enforce-lockfile
+      - flutter pub get --offline
       - flutter_rust_bridge_codegen generate
-      - flutter build linux --no-pub --release
+      - flutter build linux --release
       - install -D $BUNDLE_PATH/community_remote /app/bin/community_remote
       - cp -r $BUNDLE_PATH/lib /app/bin/lib
       - cp -r $BUNDLE_PATH/data /app/bin/data
@@ -52,22 +54,23 @@ modules:
         url: https://github.com/fzyzcjy/flutter_rust_bridge.git
         tag: v2.7.0
         dest: flutter_rust_bridge
-      - type: archive
-        url: https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.2-stable.tar.xz
-        sha256: 143f77340401e7f147a380ba18112445ed017c1d187fb4d20e40bb6ea1f13aa5
-        dest: flutter
       - type: git
         url: https://github.com/TheAppgineer/community_remote.git
         tag: 0.2.0
       - type: archive
-        path: cache.tar.gz
+        path: pub-cache.tar.gz
+        strip-components: 0
+      - type: archive
+        path: package_config.tar.gz
         strip-components: 0
       - type: shell
         commands:
-          - cd flutter && git remote set-url origin file:///run/build/community_remote/flutter
           - mkdir -p build/native_assets/linux
+          - mkdir -p flutter/bin && cp -r /app/lib/flutter/bin/cache-base flutter/bin/cache
       - type: patch
         path: run_build_tool.sh.patch
       - cargo-sources-cargo-expand.json
       - cargo-sources-flutter_rust_bridge.json
       - cargo-sources-community_remote.json
+    modules:
+      - flutter-x86_64.json
