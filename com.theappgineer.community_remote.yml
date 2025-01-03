@@ -32,10 +32,10 @@ modules:
         RUSTUP_HOME: /usr/lib/sdk/rustup-stable-minimal
         PUB_CACHE: /run/build/community_remote/.pub-cache
     build-commands:
-      - mkdir bin
+      - mkdir bin && mkdir -p build/native_assets/linux
       - cd cargo-expand && cargo build --release && cp target/release/cargo-expand ../bin/
       - cd flutter_rust_bridge/frb_codegen && cargo build --release && cp ../target/release/flutter_rust_bridge_codegen ../../bin/
-      - flutter pub get --offline
+      - setup-flutter.sh
       - flutter_rust_bridge_codegen generate
       - flutter build linux --release
       - install -D $BUNDLE_PATH/community_remote /app/bin/community_remote
@@ -63,14 +63,10 @@ modules:
       - type: archive
         path: package_config.tar.gz
         strip-components: 0
-      - type: shell
-        commands:
-          - mkdir -p build/native_assets/linux
-          - mkdir -p flutter/bin && cp -r /app/lib/flutter/bin/cache-base flutter/bin/cache
       - type: patch
         path: run_build_tool.sh.patch
       - cargo-sources-cargo-expand.json
       - cargo-sources-flutter_rust_bridge.json
       - cargo-sources-community_remote.json
     modules:
-      - flutter-x86_64.json
+      - flutter.json
