@@ -4,7 +4,6 @@ runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm19
-  - org.freedesktop.Sdk.Extension.rustup-stable-minimal
 command: community_remote
 finish-args:
   - --share=ipc
@@ -12,8 +11,8 @@ finish-args:
   - --socket=wayland
   - --device=dri
   - --share=network
-cleanup:
-  - /lib/flutter
+cleanup-commands:
+  - rm -r /var/lib/*
 modules:
   - name: community_remote
     buildsystem: simple
@@ -25,16 +24,14 @@ modules:
         aarch64:
           env:
             BUNDLE_PATH: /run/build/community_remote/build/linux/arm64/release/bundle
-      append-path: /usr/lib/sdk/llvm19/bin:/usr/lib/sdk/rustup-stable-minimal/bin:/app/lib/flutter/bin:/run/build/community_remote/bin
+      append-path: /usr/lib/sdk/llvm19/bin:/var/lib/rustup/bin:/var/lib/flutter/bin:/var/lib/frb_codegen/bin
       prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
       env:
         CARGO_HOME: /run/build/community_remote/cargo
-        RUSTUP_HOME: /usr/lib/sdk/rustup-stable-minimal
+        RUSTUP_HOME: /var/lib/rustup
         PUB_CACHE: /run/build/community_remote/.pub-cache
     build-commands:
-      - mkdir bin && mkdir -p build/native_assets/linux
-      - cd cargo-expand && cargo build --release && cp target/release/cargo-expand ../bin/
-      - cd flutter_rust_bridge/frb_codegen && cargo build --release && cp ../target/release/flutter_rust_bridge_codegen ../../bin/
+      - mkdir -p build/native_assets/linux
       - setup-flutter.sh
       - flutter_rust_bridge_codegen generate
       - flutter build linux --release
@@ -47,14 +44,6 @@ modules:
       - install -D /run/build/community_remote/flatpak/icons/512x512/com.theappgineer.community_remote.png /app/share/icons/hicolor/512x512/apps/com.theappgineer.community_remote.png
     sources:
       - type: git
-        url: https://github.com/dtolnay/cargo-expand.git
-        tag: 1.0.95
-        dest: cargo-expand
-      - type: git
-        url: https://github.com/fzyzcjy/flutter_rust_bridge.git
-        tag: v2.7.0
-        dest: flutter_rust_bridge
-      - type: git
         url: https://github.com/TheAppgineer/community_remote.git
         tag: 0.2.0
       - type: archive
@@ -65,8 +54,8 @@ modules:
         strip-components: 0
       - type: patch
         path: run_build_tool.sh.patch
-      - cargo-sources-cargo-expand.json
-      - cargo-sources-flutter_rust_bridge.json
       - cargo-sources-community_remote.json
     modules:
+      - rustup.json
+      - flutter-rust-bridge.json
       - flutter.json
