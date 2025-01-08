@@ -1,0 +1,33 @@
+{
+    "name": "flutter-rust-bridge",
+    "buildsystem": "simple",
+    "build-options": {
+        "append-path": "/var/lib/rustup/bin",
+        "env": {
+            "CARGO_HOME": "/run/build/flutter-rust-bridge/cargo",
+            "RUSTUP_HOME": "/var/lib/rustup"
+        }
+    },
+    "build-commands": [
+        "mkdir bin",
+        "cd cargo-expand && cargo build --release && cp target/release/cargo-expand ../bin/",
+        "cd flutter_rust_bridge/frb_codegen && cargo build --release && cp ../target/release/flutter_rust_bridge_codegen ../../bin/",
+        "mkdir -p /var/lib/frb_codegen && cp -r bin /var/lib/frb_codegen"
+    ],
+    "sources": [
+        {
+            "type": "git",
+            "url": "https://github.com/dtolnay/cargo-expand.git",
+            "tag": "1.0.95",
+            "dest": "cargo-expand"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/fzyzcjy/flutter_rust_bridge.git",
+            "tag": "v2.7.0",
+            "dest": "flutter_rust_bridge"
+        },
+        "cargo-sources-cargo-expand.json",
+        "cargo-sources-flutter_rust_bridge.json"
+    ]
+}
