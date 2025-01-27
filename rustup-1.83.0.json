@@ -10,7 +10,7 @@
     },
     "build-commands": [
         "chmod +x rustup-init && ./rustup-init -y --default-toolchain 1.83.0 --profile minimal --no-modify-path",
-        "ln -s /var/lib/rustup/toolchains/1.83.0-x86_64-unknown-linux-gnu /var/lib/rustup/toolchains/stable-x86_64-unknown-linux-gnu"
+        "ln -s /var/lib/rustup/toolchains/1.83.0-${FLATPAK_ARCH}-unknown-linux-gnu /var/lib/rustup/toolchains/stable-${FLATPAK_ARCH}-unknown-linux-gnu"
     ],
     "sources": [
         {
