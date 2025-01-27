@@ -46,9 +46,9 @@ modules:
       - type: git
         url: https://github.com/TheAppgineer/community_remote.git
         tag: 0.2.0
-      - type: archive
-        path: package_config.tar.gz
-        strip-components: 0
+      - type: file
+        path: package_config.json
+        dest: flutter/packages/flutter_tools/.dart_tool
       - type: patch
         path: run_build_tool.sh.patch
       - cargo-sources-community_remote.json
@@ -56,6 +56,6 @@ modules:
       - pubspec-sources-build_tool.json
       - pubspec-sources-community_remote.json
     modules:
-      - rustup.json
+      - rustup-1.83.0.json
       - flutter-rust-bridge.json
-      - flutter.json
+      - flutter-sdk-3.24.2.json

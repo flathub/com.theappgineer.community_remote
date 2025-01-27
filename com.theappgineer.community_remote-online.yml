@@ -1,0 +1,43 @@
+id: com.theappgineer.community_remote
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.llvm19
+command: community_remote
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --device=dri
+  - --share=network
+modules:
+  - name: community_remote
+    buildsystem: simple
+    build-options:
+      build-args:
+        - --share=network
+      append-path: /usr/lib/sdk/llvm19/bin:/var/lib/rustup/bin:/run/build/community_remote/flutter/bin:/var/lib/frb_codegen/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
+      env:
+        CARGO_HOME: /run/build/community_remote/cargo
+        RUSTUP_HOME: /var/lib/rustup
+        PUB_CACHE: /run/build/community_remote/.pub-cache
+    build-commands:
+      - mkdir -p build/native_assets/linux
+      - ln -s /var/lib/rustup/bin cargo/bin
+      - flutter pub get
+      - flutter_rust_bridge_codegen generate
+      - flutter build linux --release
+    sources:
+      - type: git
+        url: https://github.com/TheAppgineer/community_remote.git
+        tag: 0.2.0
+      - type: git
+        url: https://github.com/flutter/flutter.git
+        tag: 3.24.2
+        dest: flutter
+      - cargo-sources-community_remote.json
+    modules:
+      - rustup-1.83.0.json
+      - flutter-rust-bridge.json

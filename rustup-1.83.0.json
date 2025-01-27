@@ -9,7 +9,8 @@
         }
     },
     "build-commands": [
-        "chmod +x rustup-init && ./rustup-init -y --profile minimal --no-modify-path"
+        "chmod +x rustup-init && ./rustup-init -y --default-toolchain 1.83.0 --profile minimal --no-modify-path",
+        "ln -s /var/lib/rustup/toolchains/1.83.0-${FLATPAK_ARCH}-unknown-linux-gnu /var/lib/rustup/toolchains/stable-${FLATPAK_ARCH}-unknown-linux-gnu"
     ],
     "sources": [
         {
@@ -32,14 +33,14 @@
         },
         {
             "type": "file",
-            "url": "https://static.rust-lang.org/dist/channel-rust-stable.toml",
+            "url": "https://static.rust-lang.org/dist/channel-rust-1.83.0.toml",
             "sha256": "b3544fb72bc3189697fc18ac2d3fa27d57ee8434f59d9919d4d70af2c6f010b3",
             "dest": "static.rust-lang.org/dist"
         },
         {
             "type": "file",
-            "url": "https://static.rust-lang.org/dist/channel-rust-stable.toml.sha256",
-            "sha256": "627276a6bdb40a93310984ed6d807ec921e37df387266ad2a92ab73b1f563514",
+            "url": "https://static.rust-lang.org/dist/channel-rust-1.83.0.toml.sha256",
+            "sha256": "6ed809359ff672136845495bb1da030093fe2680f509cd5f3ac6fa4f4bf3bfeb",
             "dest": "static.rust-lang.org/dist"
         },
         {
