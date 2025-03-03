@@ -1,3 +1,5 @@
+# Generated from flatpak-flutter.yml, do not edit
+# Visit the flatpak-flutter project at https://github.com/TheAppgineer/flatpak-flutter
 id: com.theappgineer.community_remote
 runtime: org.freedesktop.Platform
 runtime-version: '24.08'
@@ -38,20 +40,24 @@ modules:
       - install -D $BUNDLE_PATH/community_remote /app/bin/community_remote
       - cp -r $BUNDLE_PATH/lib /app/bin/lib
       - cp -r $BUNDLE_PATH/data /app/bin/data
-      - install -D /run/build/community_remote/flatpak/com.theappgineer.community_remote.metainfo.xml /app/share/metainfo/com.theappgineer.community_remote.metainfo.xml
-      - install -D /run/build/community_remote/flatpak/com.theappgineer.community_remote.desktop /app/share/applications/com.theappgineer.community_remote.desktop
-      - install -D /run/build/community_remote/flatpak/icons/256x256/com.theappgineer.community_remote.png /app/share/icons/hicolor/256x256/apps/com.theappgineer.community_remote.png
-      - install -D /run/build/community_remote/flatpak/icons/512x512/com.theappgineer.community_remote.png /app/share/icons/hicolor/512x512/apps/com.theappgineer.community_remote.png
+      - install -D /run/build/community_remote/flatpak/com.theappgineer.community_remote.metainfo.xml
+        /app/share/metainfo/com.theappgineer.community_remote.metainfo.xml
+      - install -D /run/build/community_remote/flatpak/com.theappgineer.community_remote.desktop
+        /app/share/applications/com.theappgineer.community_remote.desktop
+      - install -D /run/build/community_remote/flatpak/icons/256x256/com.theappgineer.community_remote.png
+        /app/share/icons/hicolor/256x256/apps/com.theappgineer.community_remote.png
+      - install -D /run/build/community_remote/flatpak/icons/512x512/com.theappgineer.community_remote.png
+        /app/share/icons/hicolor/512x512/apps/com.theappgineer.community_remote.png
     sources:
       - type: git
         url: https://github.com/TheAppgineer/community_remote.git
         tag: 0.2.0
+      - cargo-sources-community_remote.json
       - type: file
         path: package_config.json
         dest: flutter/packages/flutter_tools/.dart_tool
       - type: patch
-        path: run_build_tool.sh.patch
-      - cargo-sources-community_remote.json
+        path: run_build_tool.sh.offline.patch
       - pubspec-sources-flutter.json
       - pubspec-sources-build_tool.json
       - pubspec-sources-community_remote.json
