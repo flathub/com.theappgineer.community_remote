@@ -58,9 +58,7 @@ modules:
         dest: flutter/packages/flutter_tools/.dart_tool
       - type: patch
         path: run_build_tool.sh.offline.patch
-      - pubspec-sources-flutter.json
-      - pubspec-sources-build_tool.json
-      - pubspec-sources-community_remote.json
+      - pubspec-sources.json
     modules:
       - rustup-1.83.0.json
       - flutter-rust-bridge.json
