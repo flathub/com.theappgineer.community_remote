@@ -19,7 +19,7 @@
               "x86_64"
             ],
             "url": "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init",
-            "sha256": "c8d03f559a2335693379e1d3eaee76622b2a6580807e63bcd61faea709b9f664",
+            "sha256": "a3339fb004c3d0bb9862ba0bce001861fe5cbde9c10d16591eb3f39ee6cd3e7f",
             "dest-filename": "rustup-init"
         },
         {
@@ -28,7 +28,7 @@
               "aarch64"
             ],
             "url": "https://static.rust-lang.org/rustup/dist/aarch64-unknown-linux-gnu/rustup-init",
-            "sha256": "46ccc85ca7f6c5ed28141cdc0a107c51a8ae71272899213a1f44820c7f6440b5",
+            "sha256": "c64b33db2c6b9385817ec0e49a84bcfe018ed6e328fe755c3c809580cc70ce7a",
             "dest-filename": "rustup-init"
         },
         {
