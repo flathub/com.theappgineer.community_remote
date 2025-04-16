@@ -51,11 +51,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/TheAppgineer/community_remote.git
-        tag: 0.2.0
+        commit: 6a98dba3de24048845b79882376c7ef69f59a38f
       - cargo-sources-community_remote.json
-      - type: file
-        path: package_config.json
-        dest: flutter/packages/flutter_tools/.dart_tool
       - type: patch
         path: run_build_tool.sh.offline.patch
       - pubspec-sources.json

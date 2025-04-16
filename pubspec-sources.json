@@ -401,7 +401,7 @@
         "type": "shell",
         "commands": [
             "mkdir -p .pub-cache/git/cache/flutter_android_volume_keydown-ea0316244ca1972e7004ff99998162b144210d8c",
-            "cp -r .pub-cache/git/flutter_android_volume_keydown-724769f540b4e470746cb112abe953f266926a02/.git/* .pub-cache/git/cache/flutter_android_volume_keydown-ea0316244ca1972e7004ff99998162b144210d8c"
+            "cp -rf .pub-cache/git/flutter_android_volume_keydown-724769f540b4e470746cb112abe953f266926a02/.git/* .pub-cache/git/cache/flutter_android_volume_keydown-ea0316244ca1972e7004ff99998162b144210d8c"
         ]
     },
     {
@@ -2615,5 +2615,10 @@
         "contents": "d43c1d6b787bf0afad444700ae7f4db8827f701bc61c255ac8d328c6f4d52062",
         "dest": ".pub-cache/hosted-hashes/pub.dev",
         "dest-filename": "web-1.0.0.sha256"
+    },
+    {
+        "type": "file",
+        "path": "package_config.json",
+        "dest": "flutter/packages/flutter_tools/.dart_tool"
     }
 ]
