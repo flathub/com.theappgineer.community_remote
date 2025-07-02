@@ -1,9 +1,9 @@
-diff --git a/rust_builder/cargokit/run_build_tool.sh b/rust_builder/cargokit/run_build_tool.sh
+diff --git a/run_build_tool.sh b/run_build_tool.sh
 index 0e2c973..200b520 100755
---- a/rust_builder/cargokit/run_build_tool.sh
-+++ b/rust_builder/cargokit/run_build_tool.sh
+--- a/run_build_tool.sh
++++ b/run_build_tool.sh
 @@ -66,7 +66,7 @@ fi
- 
+
  # Run pub get if needed.
  if [ ! -f "$PACKAGE_HASH_FILE" ]; then
 -    "$DART" pub get --no-precompile
@@ -12,7 +12,7 @@ index 0e2c973..200b520 100755
      echo "$PACKAGE_HASH" > "$PACKAGE_HASH_FILE"
  fi
 @@ -79,7 +79,7 @@ exit_code=$?
- 
+
  # 253 means invalid snapshot version.
  if [ $exit_code == 253 ]; then
 -  "$DART" pub get --no-precompile
