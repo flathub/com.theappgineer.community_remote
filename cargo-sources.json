@@ -2244,7 +2244,7 @@
     {
         "type": "shell",
         "commands": [
-            "cp -r --reflink=auto \"flatpak-cargo/git/rust-roon-api-33516cc/.\" \"cargo/vendor/roon-api\""
+            "cp -rf --reflink=auto \"flatpak-cargo/git/rust-roon-api-33516cc/.\" \"cargo/vendor/roon-api\""
         ]
     },
     {

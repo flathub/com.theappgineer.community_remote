@@ -13,8 +13,6 @@ finish-args:
   - --socket=wayland
   - --device=dri
   - --share=network
-cleanup-commands:
-  - rm -r /var/lib/*
 modules:
   - name: community_remote
     buildsystem: simple
@@ -22,40 +20,36 @@ modules:
       arch:
         x86_64:
           env:
-            BUNDLE_PATH: /run/build/community_remote/build/linux/x64/release/bundle
+            BUNDLE_PATH: build/linux/x64/release/bundle
         aarch64:
           env:
-            BUNDLE_PATH: /run/build/community_remote/build/linux/arm64/release/bundle
-      append-path: /usr/lib/sdk/llvm19/bin:/var/lib/rustup/bin:/var/lib/flutter/bin:/var/lib/frb_codegen/bin
+            BUNDLE_PATH: build/linux/arm64/release/bundle
+      append-path: /usr/lib/sdk/llvm19/bin:/var/lib/rustup/bin:/var/lib/frb_codegen/bin:/var/lib/flutter/bin
       prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
       env:
         CARGO_HOME: /run/build/community_remote/cargo
         RUSTUP_HOME: /var/lib/rustup
         PUB_CACHE: /run/build/community_remote/.pub-cache
     build-commands:
-      - mkdir -p build/native_assets/linux
-      - setup-flutter.sh
+      - setup-flutter.sh -C .
       - flutter_rust_bridge_codegen generate
       - flutter build linux --release
       - install -D $BUNDLE_PATH/community_remote /app/bin/community_remote
       - cp -r $BUNDLE_PATH/lib /app/bin/lib
       - cp -r $BUNDLE_PATH/data /app/bin/data
-      - install -D /run/build/community_remote/flatpak/com.theappgineer.community_remote.metainfo.xml
-        /app/share/metainfo/com.theappgineer.community_remote.metainfo.xml
-      - install -D /run/build/community_remote/flatpak/com.theappgineer.community_remote.desktop
-        /app/share/applications/com.theappgineer.community_remote.desktop
-      - install -D /run/build/community_remote/flatpak/icons/256x256/com.theappgineer.community_remote.png
-        /app/share/icons/hicolor/256x256/apps/com.theappgineer.community_remote.png
-      - install -D /run/build/community_remote/flatpak/icons/512x512/com.theappgineer.community_remote.png
-        /app/share/icons/hicolor/512x512/apps/com.theappgineer.community_remote.png
+      - install -D flatpak/com.theappgineer.community_remote.metainfo.xml /app/share/metainfo/com.theappgineer.community_remote.metainfo.xml
+      - install -D flatpak/com.theappgineer.community_remote.desktop /app/share/applications/com.theappgineer.community_remote.desktop
+      - install -D flatpak/icons/256x256/com.theappgineer.community_remote.png /app/share/icons/hicolor/256x256/apps/com.theappgineer.community_remote.png
+      - install -D flatpak/icons/512x512/com.theappgineer.community_remote.png /app/share/icons/hicolor/512x512/apps/com.theappgineer.community_remote.png
     sources:
+      - pubspec-sources.json
       - type: git
         url: https://github.com/TheAppgineer/community_remote.git
         commit: 6a98dba3de24048845b79882376c7ef69f59a38f
-      - cargo-sources-community_remote.json
       - type: patch
-        path: run_build_tool.sh.offline.patch
-      - pubspec-sources.json
+        path: cargokit/run_build_tool.sh.patch
+        dest: rust_builder/cargokit
+      - cargo-sources.json
     modules:
       - rustup-1.83.0.json
       - flutter-rust-bridge.json
