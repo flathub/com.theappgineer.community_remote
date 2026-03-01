@@ -2617,8 +2617,8 @@
         "dest-filename": "web-1.0.0.sha256"
     },
     {
-        "type": "file",
-        "path": "package_config.json",
-        "dest": "flutter/packages/flutter_tools/.dart_tool"
+        "type": "patch",
+        "path": "generated/patches/cargokit/run_build_tool.sh.patch",
+        "dest": "rust_builder/cargokit"
     }
 ]
